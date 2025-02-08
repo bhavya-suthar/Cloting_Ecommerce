@@ -20,8 +20,8 @@ import UnauthPage from './pages/unauth-page'
 
 function App() {
 
-  const isAuthenticated = false
-  const user = null
+  const isAuthenticated = true 
+  const user = {role:"user",}
 
   return (
     <div className="flex flex-col overflow-hidden bg-white">
