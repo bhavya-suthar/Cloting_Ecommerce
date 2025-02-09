@@ -2,6 +2,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
+const AuthRouter = require('./routes/auth/auth-routes')
 
 //create db connection (also create new file and import it here)
 mongoose
@@ -31,6 +32,7 @@ app.use(
 
 app.use(cookieParser());
 app.use(express.json());
+app.use('/api/auth',AuthRouter)
 
 
 
