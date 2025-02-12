@@ -12,6 +12,7 @@ const registerUser = async (req, res) => {
     const newUser = new User({ userName, password: hashPassword, email });
 
     await newUser.save();
+    
     res.status(200).json({
       success: true,
       message: "Registration successfully!!!!",
@@ -21,7 +22,7 @@ const registerUser = async (req, res) => {
     res.status(500).json({
       success: false,
       message: "Some Error occured in registration time",
-    });
+    }); 
   }
 };
 

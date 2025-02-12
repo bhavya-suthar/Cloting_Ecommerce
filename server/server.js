@@ -16,7 +16,7 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 app.use(
   cors({
-    origin: "http://localhost:5173/",
+    origin: "http://localhost:5173",
     methods: ["GET", "POST", "DELETE", "PUT"],
     allowedHeaders: [
       "Content-Type",
@@ -32,7 +32,7 @@ app.use(
 
 app.use(cookieParser());
 app.use(express.json());
-app.use('/api/auth',AuthRouter)
+  app.use('/api/auth',AuthRouter)
 
 
 
