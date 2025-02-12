@@ -41,8 +41,10 @@ const loginUser = async (req, res) => {
   try {
     const checkUser = await User.findOne({ email });
 
+    console.log("🚀 ~ loginUser ~ checkUser:", checkUser)
+    
     if (!checkUser)
-      res.json({
+     return res.json({
         success: false,
         message: "User doesn't exist! please register first",
       });
@@ -51,8 +53,10 @@ const loginUser = async (req, res) => {
       password,
       checkUser.password
     );
+    console.log("🚀 ~ loginUser ~ checkPasswordMatch:", checkPasswordMatch)
+    
     if (!checkPasswordMatch)
-      res.json({
+      return res.json({
         success: false,
         message: "Incorrect Password! please try again",
       });
@@ -82,12 +86,31 @@ const loginUser = async (req, res) => {
     console.log("🚀 ~ register ~ error:", error);
     res.status(500).json({
       success: false,
-      message: "Some Error occured in registration time",
+      message: "Some Error occured in login time",
     });
   }
 };
 
 //logout
 
+const logoutUser = (req, res) =>{
+  res.clearCookie('token').json({success: true, message: "Logged out successfully!"})
+}
+
 //auth middleware
-module.exports = { registerUser, loginUser };
+const authMiddleware = async (req, res, next) => {
+  const token = req.cookies.token
+  if(!token)
+    return res.status(401).json({success: false, message: "UnAuthorized user!"})
+
+  try{
+    const decoded = jwt.verify(token, 'CLIENT_SECRET_KEY');
+    req.user = decoded
+    next()
+  }
+  catch(error){
+    res.status(401).json({success: false, message: "UnAuthorized user!"})
+  }
+}
+
+module.exports = { registerUser, loginUser, logoutUser, authMiddleware };
