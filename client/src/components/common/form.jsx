@@ -1,4 +1,3 @@
-import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 import {
@@ -9,6 +8,7 @@ import {
   SelectValue,
 } from "../ui/select";
 import { Textarea } from "../ui/textarea";
+import { Button } from "../ui/button";
 
 function CommonForm({
   formControls,
@@ -16,6 +16,7 @@ function CommonForm({
   setFormData,
   onSubmit,
   buttonText,
+  isBtnDisabled,
 }) {
   function renderInputsByComponentType(getControlItem) {
     let element = null;
@@ -38,8 +39,8 @@ function CommonForm({
             }
           />
         );
-        break;
 
+        break;
       case "select":
         element = (
           <Select
@@ -52,11 +53,11 @@ function CommonForm({
             value={value}
           >
             <SelectTrigger className="w-full">
-              <SelectValue placeholder={getControlItem.placeholder} />
+              <SelectValue placeholder={getControlItem.label} />
             </SelectTrigger>
             <SelectContent>
-              {getControlItem.option && getControlItem?.option.length > 0
-                ? getControlItem.option.map((optionItem) => (
+              {getControlItem.options && getControlItem.options.length > 0
+                ? getControlItem.options.map((optionItem) => (
                     <SelectItem key={optionItem.id} value={optionItem.id}>
                       {optionItem.label}
                     </SelectItem>
@@ -65,8 +66,8 @@ function CommonForm({
             </SelectContent>
           </Select>
         );
-        break;
 
+        break;
       case "textarea":
         element = (
           <Textarea
@@ -82,6 +83,7 @@ function CommonForm({
             }
           />
         );
+
         break;
 
       default:
@@ -105,17 +107,18 @@ function CommonForm({
 
     return element;
   }
+
   return (
     <form onSubmit={onSubmit}>
       <div className="flex flex-col gap-3">
         {formControls.map((controlItem) => (
           <div className="grid w-full gap-1.5" key={controlItem.name}>
-            <Label className="mb-1 text-start">{controlItem.label}</Label>
+            <Label className="mb-1">{controlItem.label}</Label>
             {renderInputsByComponentType(controlItem)}
           </div>
         ))}
       </div>
-      <Button className="mt-2 w-full" type="submit">
+      <Button disabled={isBtnDisabled} type="submit" className="mt-2 w-full">
         {buttonText || "Submit"}
       </Button>
     </form>
