@@ -27,6 +27,7 @@ function AdminProducts() {
 
   const [formData, setFormData] = useState(initialFormData);
   const [imageFile, setImageFile] = useState(null);
+  console.log("🚀 ~ AdminProducts ~ imageFile:", imageFile)
   const [uploadedImageUrl, setUploadedUrl] = useState("");
 
   const onSubmit = () => {};
@@ -48,8 +49,8 @@ function AdminProducts() {
             <SheetTitle>Add New Product</SheetTitle>
           </SheetHeader>
           <ProductImageUpload
-            file={imageFile}
-            setFile={setImageFile}
+            imageFile={imageFile}
+            setImageFile={setImageFile}
             uploadedImageUrl={uploadedImageUrl}
             setUploadedUrl={setUploadedUrl}
           />
