@@ -26,9 +26,11 @@ function AdminProducts() {
     useState(false);
 
   const [formData, setFormData] = useState(initialFormData);
+  console.log("🚀 ~ AdminProducts ~ formData:", formData)
   const [imageFile, setImageFile] = useState(null);
   console.log("🚀 ~ AdminProducts ~ imageFile:", imageFile)
-  const [uploadedImageUrl, setUploadedUrl] = useState("");
+  const [uploadedImageUrl, setUploadedImageUrl] = useState("");
+  const [imageLoadingState,setImageLoadingState] = useState(false)
 
   const onSubmit = () => {};
 
@@ -52,7 +54,8 @@ function AdminProducts() {
             imageFile={imageFile}
             setImageFile={setImageFile}
             uploadedImageUrl={uploadedImageUrl}
-            setUploadedUrl={setUploadedUrl}
+            setUploadedImageUrl={setUploadedImageUrl}
+            setImageLoadingState={setImageLoadingState}
           />
           <div className="py-6">
             <CommonForm

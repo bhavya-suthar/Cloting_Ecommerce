@@ -1,17 +1,19 @@
 import { FileIcon, UploadCloudIcon, XIcon } from "lucide-react";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import { Button } from "../ui/button";
+import axios from "axios";
 
 function ProductImageUpload({
   imageFile,
   setImageFile,
   uploadedImageUrl,
-  setUploadedUrl,
+  setUploadedImageUrl,
+  setImageLoadingState,
 }) {
   const inputRef = useRef(null);
-  console.log("🚀 ~ inputRef:", inputRef)
+  console.log("🚀 ~ inputRef:", inputRef);
 
   function handleFileChange(event) {
     console.log(event.target.files);
@@ -40,6 +42,26 @@ function ProductImageUpload({
 
   console.log(imageFile);
 
+  async function uploadImageToCloudinary() {
+    setImageLoadingState(true);
+    const data = new FormData();
+    data.append("my_file", imageFile);
+    console.log("🚀 ~ uploadImageToCloudinary ~ data:", data);
+
+    const response = await axios.post(
+      "http://localhost:5000/api/admin/products/upload-image",
+      data
+    );
+    console.log("🚀 ~ uploadImageToCloudinary ~ response:", response);
+    if (response?.data?.success) {
+      setUploadedImageUrl(response.data.url), setImageLoadingState(false);
+    }
+  }
+
+  useEffect(() => {
+    if (imageFile !== null) uploadImageToCloudinary();
+  }, [imageFile]);
+
   return (
     <div className="w-full max-w-md mx-auto mt-4">
       <Label className="text-lg font-semibold mb-2 block">Upload Image</Label>
@@ -48,7 +70,6 @@ function ProductImageUpload({
         onDrop={handleDrop}
         className="border-2 border-dashed rounded-lg p-4"
         onClick={() => inputRef.current?.click()} // Ensures clicking opens the file dialog
-
       >
         <Input
           id="image-upload"
