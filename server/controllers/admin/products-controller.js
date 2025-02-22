@@ -57,7 +57,7 @@ const addProduct = async (req, res) => {
 //fetch products
 const fetchAllProduct = async (req, res) => {
   try {
-    const listOfProduct = await Product.find({});
+    const listOfProduct = await Products.find({});
     res.status(200).json({
       success: true,
       data: listOfProduct,
@@ -121,20 +121,19 @@ const editProduct = async (req, res) => {
 
 const deleteProduct = async (req, res) => {
   try {
-    const {id} = req.params
-    const product = await Products.findByIdAndUpdate(id)
+    const { id } = req.params;
+    const product = await Products.findByIdAndUpdate(id);
 
     if (!product)
-        return res.status(404).json({
-          success: false,
-          message: "Product Not Found",
-        });
+      return res.status(404).json({
+        success: false,
+        message: "Product Not Found",
+      });
 
-        res.status(200).json({
-            success:true,
-            message:"Product Deleted Successfully!!"
-        })
-
+    res.status(200).json({
+      success: true,
+      message: "Product Deleted Successfully!!",
+    });
   } catch (error) {
     console.log("🚀 ~ addProduct ~ error:", error);
     res.status(500).json({

@@ -4,6 +4,7 @@ import { Label } from "../ui/label";
 import { useEffect, useRef } from "react";
 import { Button } from "../ui/button";
 import axios from "axios";
+import { Skeleton } from "../ui/skeleton";
 
 function ProductImageUpload({
   imageFile,
@@ -11,6 +12,7 @@ function ProductImageUpload({
   uploadedImageUrl,
   setUploadedImageUrl,
   setImageLoadingState,
+  imageLoadingState
 }) {
   const inputRef = useRef(null);
   console.log("🚀 ~ inputRef:", inputRef);
@@ -54,7 +56,7 @@ function ProductImageUpload({
     );
     console.log("🚀 ~ uploadImageToCloudinary ~ response:", response);
     if (response?.data?.success) {
-      setUploadedImageUrl(response.data.url), setImageLoadingState(false);
+      setUploadedImageUrl(response.data.result.url); setImageLoadingState(false);
     }
   }
 
@@ -87,6 +89,7 @@ function ProductImageUpload({
             <span>Drag & Drop or Click to upload Image</span>
           </Label>
         ) : (
+          imageLoadingState ? <Skeleton className='h-10 bg-gray-100'/>:
           <div className="flex items-center justify-between">
             <div className="flex items-center">
               <FileIcon className="w-8 h-8 text-primary mr-2" />
