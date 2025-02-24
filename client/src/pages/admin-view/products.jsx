@@ -1,4 +1,5 @@
 import ProductImageUpload from "@/components/admin-view/image-upload";
+import AdminProductTile from "@/components/admin-view/product-tile";
 import CommonForm from "@/components/common/form";
 import { Button } from "@/components/ui/button";
 import {
@@ -35,10 +36,13 @@ function AdminProducts() {
   const [uploadedImageUrl, setUploadedImageUrl] = useState("");
   console.log("🚀 ~ AdminProducts ~ uploadedImageUrl:", uploadedImageUrl);
   const [imageLoadingState, setImageLoadingState] = useState(false);
+
+  const [currentEditedId, setCurrentEditedId] = useState(null);
+
   const dispatch = useDispatch();
   const { productList } = useSelector((state) => state.adminProducts);
   console.log("🚀 ~ AdminProducts ~ productList:", productList);
-  const {toast} = useToast()
+  const { toast } = useToast();
 
   const onSubmit = (event) => {
     event.preventDefault();
@@ -49,14 +53,14 @@ function AdminProducts() {
       })
     ).then((data) => {
       console.log("🚀 ~ onSubmit ~ data:", data);
-      if(data?.payload?.success){
-        dispatch(fetchAllProduct())
-        setOpenCreateProductsDialog(false)
-        setImageFile(null)
-        setFormData(initialFormData)
+      if (data?.payload?.success) {
+        dispatch(fetchAllProduct());
+        setOpenCreateProductsDialog(false);
+        setImageFile(null);
+        setFormData(initialFormData);
         toast({
-          title:'Product Added Successfully!!'
-        })
+          title: "Product Added Successfully!!",
+        });
       }
     });
   };
@@ -72,10 +76,25 @@ function AdminProducts() {
           Add New Product
         </Button>
       </div>
-      <div className="grid gap-4 md:grid-cols-3 lg:grid-cols-4"></div>
+      <div className="grid gap-4 md:grid-cols-3 lg:grid-cols-4">
+        {productList && productList.length > 0
+          ? productList.map((productItem) => (
+              <AdminProductTile
+                product={productItem}
+                setFormData={setFormData}
+                setOpenCreateProductsDialog={setOpenCreateProductsDialog}
+                setCurrentEditedId={setCurrentEditedId}
+              />
+            ))
+          : null}
+      </div>
       <Sheet
         open={openCreateProductsDialog}
-        onOpenChange={() => setOpenCreateProductsDialog(false)}
+        onOpenChange={() => {
+          setOpenCreateProductsDialog(false);
+          setCurrentEditedId(null)
+          setFormData(initialFormData)
+        }}
       >
         <SheetContent side="right" className="overflow-auto">
           <SheetHeader>
@@ -88,6 +107,7 @@ function AdminProducts() {
             setUploadedImageUrl={setUploadedImageUrl}
             setImageLoadingState={setImageLoadingState}
             imageLoadingState={imageLoadingState}
+            isEditMode={currentEditedId !== null}
           />
           <div className="py-6">
             <CommonForm

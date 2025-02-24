@@ -26,7 +26,7 @@ const addProduct = async (req, res) => {
       brand,
       price,
       salePrice,
-      totalPtice,
+      totalStock,
     } = req.body;
 
     const newlyCreatedProduct = new Products({
@@ -37,7 +37,7 @@ const addProduct = async (req, res) => {
       brand,
       price,
       salePrice,
-      totalPtice,
+      totalStock,
     });
 
     await newlyCreatedProduct.save();
@@ -83,7 +83,7 @@ const editProduct = async (req, res) => {
       brand,
       price,
       salePrice,
-      totalPtice,
+      totalStock,
     } = req.body;
 
     const findProduct = await Products.findById(id);

@@ -29,6 +29,7 @@ export const fetchAllProduct = createAsyncThunk(
     return result?.data;
   }
 );
+
 export const editProduct = createAsyncThunk(
   "/products/editProduct",
   async ({ id, formData }) => {
