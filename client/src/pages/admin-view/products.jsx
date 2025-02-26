@@ -12,6 +12,7 @@ import { addProductFormElements } from "@/config";
 import { useToast } from "@/hooks/use-toast";
 import {
   addNewProduct,
+  deleteProduct,
   editProduct,
   fetchAllProduct,
 } from "@/store/admin/products-slice";
@@ -60,7 +61,7 @@ function AdminProducts() {
               dispatch(fetchAllProduct());
               setOpenCreateProductsDialog(false);
               setFormData(initialFormData);
-              setCurrentEditedId(null)
+              setCurrentEditedId(null);
             }
           }
         )
@@ -83,6 +84,24 @@ function AdminProducts() {
         });
   };
 
+  function isFormValid() {
+    return Object.keys(formData)
+      .map((key) => formData[key] !== "")
+      .every((item) => item);
+  }
+
+  function handleDelete(getCurrentProductId) {
+    console.log(
+      "🚀 ~ handleDelete ~ getCurrentProductId:",
+      getCurrentProductId
+    );
+    dispatch(deleteProduct(getCurrentProductId)).then((data)=>{
+      if(data?.payload?.success){
+        dispatch(fetchAllProduct())
+      }
+    })
+  }
+
   useEffect(() => {
     dispatch(fetchAllProduct());
   }, [dispatch]);
@@ -102,6 +121,7 @@ function AdminProducts() {
                 setFormData={setFormData}
                 setOpenCreateProductsDialog={setOpenCreateProductsDialog}
                 setCurrentEditedId={setCurrentEditedId}
+                handleDelete={handleDelete}
               />
             ))
           : null}
@@ -136,6 +156,7 @@ function AdminProducts() {
               setFormData={setFormData}
               buttonText={currentEditedId !== null ? "Edit" : "Add"}
               formControls={addProductFormElements}
+              isBtnDisabled={!isFormValid()}
             />
           </div>
         </SheetContent>
