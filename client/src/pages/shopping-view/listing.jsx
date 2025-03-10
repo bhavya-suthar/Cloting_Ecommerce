@@ -10,7 +10,12 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { sortOptions } from "@/config";
-import { fetchAllFilteredProducts, fetchProductDetails } from "@/store/shop/products-slice";
+import { useToast } from "@/hooks/use-toast";
+import { addToCart, fetchCartItems } from "@/store/shop/cart-slice";
+import {
+  fetchAllFilteredProducts,
+  fetchProductDetails,
+} from "@/store/shop/products-slice";
 import { ArrowUpDownIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -20,13 +25,13 @@ function createSearchParamsHelper(filterParams) {
   const queryParams = [];
   for (const [key, value] of Object.entries(filterParams)) {
     if (Array.isArray(value) && value.length > 0) {
-      const paramValue = value.join(",")
-      
-      queryParams.push(`${key}=${encodeURIComponent(paramValue)}`)
+      const paramValue = value.join(",");
+
+      queryParams.push(`${key}=${encodeURIComponent(paramValue)}`);
     }
   }
-  console.log("🚀 ~ createSearchParamsHelper ~ queryParams:", queryParams)
-  return queryParams.join("&")
+  console.log("🚀 ~ createSearchParamsHelper ~ queryParams:", queryParams);
+  return queryParams.join("&");
 }
 
 function ShoppingListing() {
@@ -36,20 +41,25 @@ function ShoppingListing() {
   const [sort, setSort] = useState(null);
   const [searchParams, setSearchParams] = useSearchParams();
   console.log("🚀 ~ ShoppingListing ~ searchParams:", searchParams);
-  const [openDetailsDialog, setOpenDetailDialog] = useState(false)
+  const [openDetailsDialog, setOpenDetailDialog] = useState(false);
+  const { toast } = useToast();
 
-  const { productList, productDetails } = useSelector((state) => state.shopProducts);
+  const { productList, productDetails } = useSelector(
+    (state) => state.shopProducts
+  );
   console.log("🚀 ~ ShoppingListing ~ productList:", productList);
-  
+
+  const { user } = useSelector((state) => state.auth);
+
   function handleSort(value) {
     console.log("🚀 ~ handleSort ~ value:", value);
     setSort(value);
   }
-  
+
   function handleFilter(getSectionId, getCurrentOption) {
     console.log("🚀 ~ handleFilter ~ getSectionId:", getSectionId);
     console.log("🚀 ~ handleFilter ~ getCurrentOption:", getCurrentOption);
-    
+
     let cpyFilters = { ...filters };
     const indexOfCurrentSection = Object.keys(cpyFilters).indexOf(getSectionId);
     console.log(
@@ -64,7 +74,7 @@ function ShoppingListing() {
       };
     } else {
       const indexOfCurrentOption =
-      cpyFilters[getSectionId].indexOf(getCurrentOption);
+        cpyFilters[getSectionId].indexOf(getCurrentOption);
       if (indexOfCurrentOption === -1)
         cpyFilters[getSectionId].push(getCurrentOption);
       else cpyFilters[getSectionId].splice(indexOfCurrentOption, 1);
@@ -73,34 +83,60 @@ function ShoppingListing() {
     setFilters(cpyFilters);
     sessionStorage.setItem("filters", JSON.stringify(cpyFilters));
   }
-  
-  function handleGetProductDetails(getCurrentProductId){
-    console.log("🚀 ~ handleGetProductDetails ~ getCurrentProductId:", getCurrentProductId)
-    dispatch(fetchProductDetails(getCurrentProductId))
+
+  function handleGetProductDetails(getCurrentProductId) {
+    console.log(
+      "🚀 ~ handleGetProductDetails ~ getCurrentProductId:",
+      getCurrentProductId
+    );
+    dispatch(fetchProductDetails(getCurrentProductId));
   }
+
+  function handleAddtoCart(getCurrentProductId) {
+    console.log(
+      "🚀 ~ handleAddtoCart ~ getCurrentProductId:",
+      getCurrentProductId
+    );
+    dispatch(
+      addToCart({
+        userId: user?.id,
+        productId: getCurrentProductId,
+        quantity: 1,
+      })
+    ).then((data) => {
+      if (data?.payload?.success) {
+        dispatch(fetchCartItems(user?.id));
+        toast({ title: "Product is added to cart!!!" });
+      }
+    });
+  }
+
   useEffect(() => {
     setSort("price-lowtohigh");
     setFilters(JSON.parse(sessionStorage.getItem("filters")) || {});
   }, []);
-  
+
   useEffect(() => {
     if (filters && Object.keys(filters).length > 0) {
       const createQueryString = createSearchParamsHelper(filters);
       setSearchParams(new URLSearchParams(createQueryString));
     }
   }, [filters]);
-  
+
   // // fetchList of product
   useEffect(() => {
-    if(filters!== null && sort !== null)
-      dispatch(fetchAllFilteredProducts({filterParams: filters, sortParams: sort}));
+    if (filters !== null && sort !== null)
+      dispatch(
+        fetchAllFilteredProducts({ filterParams: filters, sortParams: sort })
+      );
   }, [dispatch, sort, filters]);
 
-  useEffect(()=>{
-    if(productDetails!== null) setOpenDetailDialog(true)
-  },[productDetails])
+  useEffect(() => {
+    if (productDetails !== null) setOpenDetailDialog(true);
+  }, [productDetails]);
 
-  console.log("🚀 ~ ShoppingListing ~ productDetails:", productDetails)
+  console.log("🚀 ~ ShoppingListing ~ productDetails:", productDetails);
+
   return (
     <div className="grid grid-cols-1 md:grid-cols-[200px_1fr] gap-6 p-4 md:p-6">
       <ProductFilter filters={filters} handleFilter={handleFilter} />
@@ -141,13 +177,21 @@ function ShoppingListing() {
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4">
           {productList && productList.length > 0
             ? productList.map((productItem) => (
-                <ShoppingProductTile product={productItem} handleGetProductDetails={handleGetProductDetails} />
+                <ShoppingProductTile
+                  product={productItem}
+                  handleGetProductDetails={handleGetProductDetails}
+                  handleAddtoCart={handleAddtoCart}
+                />
               ))
             : null}
         </div>
       </div>
 
-      <ProductDetailsDialog open={openDetailsDialog} setOpen={setOpenDetailDialog} productDetails={productDetails}/>
+      <ProductDetailsDialog
+        open={openDetailsDialog}
+        setOpen={setOpenDetailDialog}
+        productDetails={productDetails}
+      />
     </div>
   );
 }

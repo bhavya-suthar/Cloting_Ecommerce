@@ -4,9 +4,19 @@ import { Sheet, SheetContent, SheetTrigger } from "../ui/sheet";
 import { Button } from "../ui/button";
 import { useDispatch, useSelector } from "react-redux";
 import { shoppingViewHeaderMenuItems } from "@/config";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "../ui/dropdown-menu";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "../ui/dropdown-menu";
 import { Avatar, AvatarFallback } from "../ui/avatar";
 import { logoutUser } from "@/store/auth-slice";
+import UserCartWrapper from "./cart-wrapper";
+import { useEffect, useState } from "react";
+import { fetchCartItems } from "@/store/shop/cart-slice";
 
 function MenuItems() {
   return (
@@ -25,45 +35,62 @@ function MenuItems() {
 }
 
 function HeaderRightContent() {
+  const { user } = useSelector((state) => state.auth);
+  console.log("🚀 ~ HeaderRightContent ~ user:", user);
+  const [openCartSheet, setOpenCartSheet] = useState(false);
+  const { cartItems } = useSelector((state) => state.shopCart);
+  console.log("🚀 ~ HeaderRightContent ~ cartItems:", cartItems);
 
-  
-  const { user} = useSelector((state) => state.auth);
-  console.log("🚀 ~ HeaderRightContent ~ user:", user)
-  const navigate = useNavigate()
-  const dispatch = useDispatch()
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
 
-  function handleLogOut(){
-    dispatch(logoutUser())
+  function handleLogOut() {
+    dispatch(logoutUser());
   }
+
+  useEffect(() => {
+    dispatch(fetchCartItems(user?.id));
+  }, [dispatch]);
   return (
     <div className="flex lg:items-center lg:flex-row flex-col gap-4">
-
-      <Sheet>
-        <Button varient="outline" size="icon">
+      <Sheet open={openCartSheet} onOpenChange={() => setOpenCartSheet(false)}>
+        <Button
+          onClick={() => setOpenCartSheet(true)}
+          varient="outline"
+          size="icon"
+        >
           <ShoppingCart className="h-6 w-6" />
           <span className="sr-only">User Cart</span>
         </Button>
+        <UserCartWrapper
+          cartItems={
+            cartItems && cartItems.items && cartItems.items.length > 0
+              ? cartItems.items
+              : []
+          }
+        />
       </Sheet>
 
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Avatar className="bg-black">
-            <AvatarFallback className="bg-black text-white font-extrabold">{user?.userName[0].toUpperCase()}</AvatarFallback>
+            <AvatarFallback className="bg-black text-white font-extrabold">
+              {user?.userName[0].toUpperCase()}
+            </AvatarFallback>
           </Avatar>
         </DropdownMenuTrigger>
-        <DropdownMenuContent side='right' className="w-56">
+        <DropdownMenuContent side="right" className="w-56">
           <DropdownMenuLabel>Logged In as {user?.userName}</DropdownMenuLabel>
-          <DropdownMenuSeparator/>
-          <DropdownMenuItem onClick ={()=>navigate('/shop/account')}>
-          <UserCog className="mr-2 h-4 w-4"/>
-          Account
+          <DropdownMenuSeparator />
+          <DropdownMenuItem onClick={() => navigate("/shop/account")}>
+            <UserCog className="mr-2 h-4 w-4" />
+            Account
           </DropdownMenuItem>
-          <DropdownMenuSeparator/>
-          <DropdownMenuItem onClick ={handleLogOut}>
-          <LogOut className="mr-2 h-4 w-4" />
-          Logout
+          <DropdownMenuSeparator />
+          <DropdownMenuItem onClick={handleLogOut}>
+            <LogOut className="mr-2 h-4 w-4" />
+            Logout
           </DropdownMenuItem>
-
         </DropdownMenuContent>
       </DropdownMenu>
     </div>
@@ -71,8 +98,8 @@ function HeaderRightContent() {
 }
 
 function ShoppingHeader() {
-  const { isAuthenticated ,user} = useSelector((state) => state.auth);
-  console.log("🚀 ~ ShoppingHeader ~ user:", user)
+  const { isAuthenticated, user } = useSelector((state) => state.auth);
+  console.log("🚀 ~ ShoppingHeader ~ user:", user);
   return (
     <header className="sticky top-0 z-40 w-full border-b bg-background">
       <div className="flex h-16 items-center justify-between px-4 md:px-6">
@@ -95,13 +122,13 @@ function ShoppingHeader() {
         <div className="hidden lg:block">
           <MenuItems />
         </div>
-          <div className="hidden lg:block">
-            {" "}
-            <HeaderRightContent />
-          </div>
+        <div className="hidden lg:block">
+          {" "}
+          <HeaderRightContent />
+        </div>
       </div>
     </header>
   );
-}                      
+}
 
 export default ShoppingHeader;
