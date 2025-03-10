@@ -102,6 +102,6 @@ function ShoppingHeader() {
       </div>
     </header>
   );
-}
+}                      
 
 export default ShoppingHeader;
