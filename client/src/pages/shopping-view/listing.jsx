@@ -42,7 +42,7 @@ function ShoppingListing() {
   const [searchParams, setSearchParams] = useSearchParams();
   console.log("🚀 ~ ShoppingListing ~ searchParams:", searchParams);
   const [openDetailsDialog, setOpenDetailDialog] = useState(false);
-  const { toast } = useToast();
+  const { toast  } = useToast();
 
   const { productList, productDetails } = useSelector(
     (state) => state.shopProducts

@@ -97,7 +97,7 @@ const fetchCartItems = async (req, res) => {
     console.log("🚀 ~ addToCart ~ error:", error);
     res.status(500).json({
       success: false,
-      message: "Some Error occured in Add to Cart",
+      message: "Some Error occured in Fetch Item From the Cart...",
     });
   }
 };
@@ -155,7 +155,7 @@ const updateCartItemQty = async (req, res) => {
     console.log("🚀 ~ addToCart ~ error:", error);
     res.status(500).json({
       success: false,
-      message: "Some Error occured in Add to Cart",
+      message: "Some Error occured in Cart Updation",
     });
   }
 };
@@ -188,7 +188,7 @@ const deleteCartItem = async (req, res) => {
     );
     await cart.save();
 
-    await Cart.populate({
+    await cart.populate({
         path: "items.productId",
         select: "image title price salePrice",
       });
@@ -212,7 +212,7 @@ const deleteCartItem = async (req, res) => {
     console.log("🚀 ~ addToCart ~ error:", error);
     res.status(500).json({
       success: false,
-      message: "Some Error occured in Add to Cart",
+      message: "Some Error occured in Delete items from the cart..",
     });
   }
 };

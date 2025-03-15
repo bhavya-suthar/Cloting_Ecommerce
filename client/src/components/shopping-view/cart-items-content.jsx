@@ -9,24 +9,25 @@ function UserCartItemsContent({ cartItem }) {
   console.log("🚀 ~ UserCartItemsContent ~ user:", user)
 
   function handleCartItemDelete(getCartItem) {
-    dispatch(deleteCartItem({ userId: user.id, productId: getCartItem?.productId?._id }));
+    dispatch(deleteCartItem({ userId: user?.id, productId: getCartItem?.productId?._id }));
     console.log("🚀 ~ handleCartItemDelete ~ getCartItem:", getCartItem)
   }
 
   console.log("🚀 ~ UserCartItemsContent ~ cartItem:", cartItem);
   console.log(
     "🚀 ~ UserCartItemsContent ~ cartItem?.image:",
-    cartItem.productId.image
+    cartItem?.productId?.image
+
   );
   return (
     <div className="flex items-center space-x-4">
       <img
-        src={cartItem.productId.image}
-        alt={cartItem.productId.title}
+        src={cartItem?.productId?.image}
+        alt={cartItem?.productId?.title}
         className="w-20 h-20 rounded object-cover"
       />
       <div className="flex-1">
-        <h3 className="font-extrabold">{cartItem.productId.title}</h3>
+        <h3 className="font-extrabold">{cartItem?.productId?.title}</h3>
         <div className="flex items-center mt-1 gap-2">
           <Button
             variant="outline"
@@ -52,8 +53,8 @@ function UserCartItemsContent({ cartItem }) {
           ₹
           {(
             (cartItem?.productId?.salePrice > 0
-              ? cartItem.productId.salePrice
-              : cartItem.productId.price) * cartItem.quantity
+              ? cartItem?.productId?.salePrice
+              : cartItem?.productId?.price) * cartItem.quantity
           ).toFixed(2)}
         </p>
         <Trash
