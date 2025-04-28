@@ -85,8 +85,8 @@ const shoppingCartSlice = createSlice({
         state.cartItems = action.payload.data
     })
     .addCase(updateCartQuantity.rejected, (state, action)=>{
-        state.isLoading = false,
-        state.cartItems = []
+        state.isLoading = false
+        // state.cartItems = []
     })
     .addCase(deleteCartItem.pending, (state)=>{
         state.isLoading = true
