@@ -7,6 +7,9 @@ const adminProductsRoute = require('./routes/admin/products-routes')
 const shopProductsRouter = require('./routes/shop/products-routes')
 const shopCartRouter = require('./routes/shop/cart-routers')
 
+const shopAddressRouter = require('./routes/shop/address-routes')
+
+
 //create db connection (also create new file and import it here)
 mongoose
   .connect(
@@ -38,5 +41,6 @@ app.use(express.json());
   app.use('/api/admin/products',adminProductsRoute)
   app.use('/api/shop/products',shopProductsRouter)
   app.use('/api/shop/cart',shopCartRouter)
+  app.use('/api/shop/address',shopAddressRouter)
 
 app.listen(PORT,()=>console.log(`Server is now running on port ${PORT}`))
