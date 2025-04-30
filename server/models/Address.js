@@ -1,12 +1,12 @@
 const mongoose = require('mongoose')
 
 const AddressSchema = new mongoose.Schema({
-    userId:string,
-    address:string,
-    city:string,
-    pinCode:string,
-    phone:string,
-    notes:string
+    userId:String,
+    address:String,
+    city:String,
+    pinCode:String,
+    phone:String,
+    notes:String
 },{timestamps:true})
 
 module.exports = mongoose.model("Address",AddressSchema)
