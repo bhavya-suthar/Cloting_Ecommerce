@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   addNewAddress,
   deleteAddress,
+  editAddress,
   fetchAllAddresses,
 } from "@/store/shop/address-slice";
 import AddressCard from "./address-card";
@@ -28,18 +29,47 @@ const Address = () => {
   const { addressList } = useSelector((state) => state.shopAddress);
   console.log("🚀 ~ Address ~ addressList:", addressList);
 
+  const [currentEditedId, setCurrentEditedId] = useState(null);
+
   const handleManageAddress = (event) => {
     event.preventDefault();
 
-    dispatch(addNewAddress({ ...formData, userId: user?.id })).then((data) => {
-      console.log("data", data);
-      if (data?.payload?.success) {
-        dispatch(fetchAllAddresses(user?.id));
-        setFormData(initialAddressFormData);
-      }
-    });
+    currentEditedId !== null
+      ? dispatch(
+          editAddress({
+            userId: user?.id,
+            addressId: currentEditedId,
+            formData,
+          })
+        ).then((data) => {
+          if (data?.payload?.success) {
+            dispatch(fetchAllAddresses(user?.id));
+            setCurrentEditedId(null);
+            setFormData(initialAddressFormData);
+          }
+        })
+      : dispatch(addNewAddress({ ...formData, userId: user?.id })).then(
+          (data) => {
+            console.log("data", data);
+            if (data?.payload?.success) {
+              dispatch(fetchAllAddresses(user?.id));
+              setFormData(initialAddressFormData);
+            }
+          }
+        );
   };
 
+  const handleEditAddress = (getCurrentAddress) => {
+    setCurrentEditedId(getCurrentAddress?._id);
+    setFormData({
+      ...formData,
+      address: getCurrentAddress?.address,
+      city: getCurrentAddress?.city,
+      phone: getCurrentAddress?.phone,
+      pincode: getCurrentAddress?.pincode,
+      notes: getCurrentAddress?.notes,
+    });
+  };
   const handleDeleteAddress = (getCurrentAddress) => {
     console.log(
       "🚀 ~ handleDeleteAddress ~ getCurrentAddress:",
@@ -71,19 +101,22 @@ const Address = () => {
               <AddressCard
                 addressInfo={singleAddressItem}
                 handleDeleteAddress={handleDeleteAddress}
+                handleEditAddress={handleEditAddress}
               />
             ))
           : null}
       </div>
       <CardHeader>
-        <CardTitle>Add New Address</CardTitle>
+        <CardTitle>
+          {currentEditedId !== null ? "Edit Address" : "Add New Address"}
+        </CardTitle>
       </CardHeader>
       <CardContent className="space-y-3">
         <CommonForm
           formControls={addressFormControls}
           formData={formData}
           setFormData={setFormData}
-          buttonText={"Add"}
+          buttonText={currentEditedId !== null ? "Edit" : "Add"}
           onSubmit={handleManageAddress}
           isBtnDisabled={!isFormValid()}
         />
