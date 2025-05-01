@@ -10,6 +10,7 @@ import {
   fetchAllAddresses,
 } from "@/store/shop/address-slice";
 import AddressCard from "./address-card";
+import { useToast } from "@/hooks/use-toast";
 
 const initialAddressFormData = {
   address: "",
@@ -31,8 +32,19 @@ const Address = () => {
 
   const [currentEditedId, setCurrentEditedId] = useState(null);
 
+  const {toast} = useToast()
+
   const handleManageAddress = (event) => {
     event.preventDefault();
+
+    if(addressList.length >= 3 && currentEditedId === null){
+      setFormData(initialAddressFormData)
+      toast({
+        title: 'You can add max 3 addresses!',
+        variant: 'destructive'
+      })
+      return 
+    }
 
     currentEditedId !== null
       ? dispatch(
@@ -46,6 +58,9 @@ const Address = () => {
             dispatch(fetchAllAddresses(user?.id));
             setCurrentEditedId(null);
             setFormData(initialAddressFormData);
+            toast({
+              title: 'Address updated successfully!'
+            })
           }
         })
       : dispatch(addNewAddress({ ...formData, userId: user?.id })).then(
@@ -54,6 +69,9 @@ const Address = () => {
             if (data?.payload?.success) {
               dispatch(fetchAllAddresses(user?.id));
               setFormData(initialAddressFormData);
+              toast({
+                title: 'Address added successfully!'
+              })
             }
           }
         );
@@ -80,6 +98,9 @@ const Address = () => {
     ).then((data) => {
       if (data?.payload?.success) {
         dispatch(fetchAllAddresses(user?.id));
+        toast({
+          title: 'Addresses deleted successfully!'
+        })
       }
     });
   };
