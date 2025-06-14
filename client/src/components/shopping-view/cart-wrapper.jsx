@@ -4,7 +4,7 @@ import { SheetContent, SheetHeader, SheetTitle } from "../ui/sheet";
 import UserCartItemsContent from "./cart-items-content";
 
 function UserCartWrapper({ cartItems, setOpenCartSheet }) {
-  console.log("🚀 ~ UserCartWrapper ~ cartItems:", cartItems);
+  const navigate = useNavigate();
 
   const totalCartAmount =
     cartItems && cartItems.length > 0
@@ -19,7 +19,6 @@ function UserCartWrapper({ cartItems, setOpenCartSheet }) {
         )
       : 0;
 
-  const navigate = useNavigate();
   return (
     <SheetContent className="sm:max-w-md">
       <SheetHeader>
@@ -33,7 +32,7 @@ function UserCartWrapper({ cartItems, setOpenCartSheet }) {
       <div className="mt-8 space-y-4">
         <div className="flex justify-between">
           <span className="font-bold">Total</span>
-          <span className="font-bold">₹{totalCartAmount}</span>
+          <span className="font-bold">${totalCartAmount}</span>
         </div>
       </div>
       <Button

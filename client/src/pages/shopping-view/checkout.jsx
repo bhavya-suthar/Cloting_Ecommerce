@@ -6,15 +6,19 @@ import UserCartItemsContent from "@/components/shopping-view/cart-items-content"
 function ShoppingCheckout() {
   const { cartItems } = useSelector((state) => state.shopCart);
   console.log("🚀 ~ ShoppingCheckout ~ cartItems:", cartItems.items);
+  console.log(
+    "🚀 ~ ShoppingCheckout ~ cartItems  product id quantity:",
+    cartItems?.items?.quantity
+  );
 
   const totalCartAmount =
     cartItems && cartItems.length > 0
       ? cartItems.reduce(
           (sum, currentItem) =>
             sum +
-            (currentItem?.salePrice > 0
-              ? currentItem?.salePrice
-              : currentItem?.price) *
+            (currentItem?.productId?.salePrice > 0
+              ? currentItem?.productId?.salePrice
+              : currentItem?.productId?.price) *
               currentItem?.quantity,
           0
         )
@@ -40,12 +44,11 @@ function ShoppingCheckout() {
         </div>
 
         <div className="mt-8 space-y-4">
-        <div className="flex justify-between">
-          <span className="font-bold">Total</span>
-          <span className="font-bold">₹{totalCartAmount}</span>
+          <div className="flex justify-between">
+            <span className="font-bold">Total</span>
+            <span className="font-bold">₹{totalCartAmount}</span>
+          </div>
         </div>
-        </div>
-
       </div>
     </div>
   );

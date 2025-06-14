@@ -1,5 +1,5 @@
 
-import { Route, Routes } from 'react-router-dom'
+import { Navigate, Route, Routes } from 'react-router-dom'
 import './App.css'
 import AuthLayout from './components/auth/layout'
 import AuthLogin from './pages/auth/login'
@@ -39,6 +39,7 @@ function App() {
   return (
     <div className="flex flex-col overflow-hidden bg-white">
     <Routes>
+    <Route path="/" element={<Navigate to="/auth/login" />} />
       <Route path="/auth" element={
         <CheckAuth isAuthenticated={isAuthenticated} user={user}>
           <AuthLayout/>
