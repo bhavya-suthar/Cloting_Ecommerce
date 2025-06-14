@@ -2,6 +2,7 @@ import Address from "@/components/shopping-view/Address";
 import img from "../../assets/account.jpg";
 import { useSelector } from "react-redux";
 import UserCartItemsContent from "@/components/shopping-view/cart-items-content";
+import { Button } from "@/components/ui/button";
 
 function ShoppingCheckout() {
   const { cartItems } = useSelector((state) => state.shopCart);
@@ -10,19 +11,20 @@ function ShoppingCheckout() {
     "🚀 ~ ShoppingCheckout ~ cartItems  product id quantity:",
     cartItems?.items?.quantity
   );
-
   const totalCartAmount =
-    cartItems && cartItems.length > 0
-      ? cartItems.reduce(
+    cartItems && cartItems.items && cartItems.items.length > 0
+      ? cartItems.items.reduce(
           (sum, currentItem) =>
             sum +
-            (currentItem?.productId?.salePrice > 0
-              ? currentItem?.productId?.salePrice
-              : currentItem?.productId?.price) *
+            (currentItem?.salePrice > 0
+              ? currentItem?.salePrice
+              : currentItem?.price) *
               currentItem?.quantity,
           0
         )
       : 0;
+
+      console.log("🚀 ~ ShoppingCheckout ~ totalCartAmount:", totalCartAmount)
 
   return (
     <div className="flex flex-col">
@@ -41,13 +43,16 @@ function ShoppingCheckout() {
                 <UserCartItemsContent cartItem={item} />
               ))
             : null}
-        </div>
 
         <div className="mt-8 space-y-4">
           <div className="flex justify-between">
             <span className="font-bold">Total</span>
             <span className="font-bold">₹{totalCartAmount}</span>
           </div>
+        </div>
+        <div className="mt-4">
+          <Button className="w-full">Checkout With Paypal</Button>
+        </div>
         </div>
       </div>
     </div>
