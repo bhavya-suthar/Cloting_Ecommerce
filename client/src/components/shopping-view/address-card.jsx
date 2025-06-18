@@ -3,9 +3,9 @@ import { Card, CardContent, CardFooter } from '../ui/card'
 import { Label } from '../ui/label'
 import { Button } from '../ui/button'
 
-const AddressCard = ({addressInfo, handleDeleteAddress, handleEditAddress}) => {
+const AddressCard = ({addressInfo, handleDeleteAddress, handleEditAddress,setCurrentSelectedAddress}) => {
   return (
-    <Card>
+    <Card onClick={setCurrentSelectedAddress ? () => setCurrentSelectedAddress(addressInfo) : null}>
         <CardContent className="grid p-4 gap-4">
             <Label>Address: {addressInfo?.address}</Label>
             <Label>City: {addressInfo?.city}</Label>

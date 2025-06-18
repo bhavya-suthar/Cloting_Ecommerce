@@ -6,7 +6,7 @@ const OrderSchema = new mongoose.Schema({
         title: String,
         image: String,
         price: String,
-        quantiy: Number
+        quantity: Number
     }],
     addressInfo: {
         addressId: String,
@@ -16,7 +16,7 @@ const OrderSchema = new mongoose.Schema({
         phone: String,
         notes: String
     },
-    orederStatus: String,
+    orderStatus: String,
     paymentMethod: String,
     paymentStatus: String,
     totalAmount: Number,
