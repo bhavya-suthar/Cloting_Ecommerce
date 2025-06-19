@@ -1,5 +1,39 @@
+import { Card, CardHeader, CardTitle } from "@/components/ui/card";
+import { capturePayment } from "@/store/shop/order-slice";
+import { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { useLocation, useParams } from "react-router-dom";
+
 function PaypalReturnPage() {
-    return <div>Paypal Reurn Page</div>;
+    const dispatch = useDispatch()
+    const location= useLocation()
+    const params = new URLSearchParams(location.search)
+    const paymentId = params.get('paymentId')
+    const payerId = params.get('payerId')
+
+    useEffect(() => {
+
+        if(paymentId && payerId){
+            const orderId = JSON.parse(sessionStorage.getItem('currentOrderId'))
+
+            dispatch(capturePayment({payerId,paymentId,orderId})).then(data=>{
+                if(data?.payload?.success){
+                     sessionStorage.removeItem('currentOrderId')
+                     window.location.href ='/shop/payment-success'
+                }
+            })
+        }
+      
+    }, [paymentId,payerId,dispatch])
+    
+
+    return (
+        <Card>
+            <CardHeader>
+                <CardTitle>Payment Processing..... Please Wait!!!</CardTitle>
+            </CardHeader>
+        </Card>
+    )
 }
 
 export default PaypalReturnPage;

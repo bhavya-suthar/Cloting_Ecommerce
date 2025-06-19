@@ -18,13 +18,16 @@ function ShoppingCheckout() {
   const { user } = useSelector((state) => state.auth);
   console.log("🚀 ~ ShoppingCheckout ~ user:", user);
 
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
-  const [currentSelectedAddress, setCurrentSelectedAddress] = useState(null)
-  console.log("🚀 ~ ShoppingCheckout ~ currentSelectedAddress:", currentSelectedAddress)
-  const [isPaymentStart, setIsPaymentStart] = useState(false)
+  const [currentSelectedAddress, setCurrentSelectedAddress] = useState(null);
+  console.log(
+    "🚀 ~ ShoppingCheckout ~ currentSelectedAddress:",
+    currentSelectedAddress
+  );
+  const [isPaymentStart, setIsPaymentStart] = useState(false);
 
-  const {approvalURL} = useSelector(state => state.shopOrder)
+  const { approvalURL } = useSelector((state) => state.shopOrder);
 
   const totalCartAmount =
     cartItems && cartItems.items && cartItems.items.length > 0
@@ -41,18 +44,19 @@ function ShoppingCheckout() {
 
   console.log("🚀 ~ ShoppingCheckout ~ totalCartAmount:", totalCartAmount);
 
-
   const handleInitiatePaypalPayment = () => {
     const orderData = {
       userId: user?.id,
+      cardId:cartItems?._id,
       cartItems: cartItems.items.map((singleCartItem) => ({
         productId: singleCartItem?.productId,
         title: singleCartItem?.title,
         image: singleCartItem?.image,
-        price: singleCartItem?.salePrice > 0
-  ? singleCartItem?.salePrice
-  : singleCartItem?.price,
-quantity: singleCartItem?.quantity, // ✅ fixed spelling
+        price:
+          singleCartItem?.salePrice > 0
+            ? singleCartItem?.salePrice
+            : singleCartItem?.price,
+        quantity: singleCartItem?.quantity, // ✅ fixed spelling
 
         // price: singleCartItem?.salePrice > 0 ? singleCartItem?.salePrice : singleCartItem?.price,
         // quantiy: singleCartItem?.quantity,
@@ -63,30 +67,32 @@ quantity: singleCartItem?.quantity, // ✅ fixed spelling
         city: currentSelectedAddress?.city,
         pincode: currentSelectedAddress?.pincode,
         phone: currentSelectedAddress?.phone,
-        notes: currentSelectedAddress?.notes},
-      orderStatus: 'Pending',
-      paymentMethod: 'paypal',
-      paymentStatus: 'pending',
+        notes: currentSelectedAddress?.notes,
+      },
+      orderStatus: "Pending",
+      paymentMethod: "paypal",
+      paymentStatus: "pending",
       totalAmount: totalCartAmount,
       orderDate: new Date(),
       orderUpdateDate: new Date(),
       paymentId: "",
       payerId: "",
     };
-    console.log("🚀 ~ handleInitiatePaypalPayment ~ orderData:", orderData)
-    dispatch(createNewOrder(orderData)).then(data => console.log("data", data))
-    if(data?.payload?.success){
-      setIsPaymentStart(true)
-    }
-    else{
-      setIsPaymentStart(false)
+    console.log("🚀 ~ handleInitiatePaypalPayment ~ orderData:", orderData);
+    dispatch(createNewOrder(orderData)).then((data) =>
+      console.log("data", data)
+    );
+    if (data?.payload?.success) {
+      setIsPaymentStart(true);
+    } else {
+      setIsPaymentStart(false);
     }
   };
 
-  if(approvalURL){
-    window.location.href = approvalURL
+  if (approvalURL) {
+    window.location.href = approvalURL;
   }
-  
+
   return (
     <div className="flex flex-col">
       <div className="relative h-[300px] w-full overflow-hidden">
@@ -97,7 +103,7 @@ quantity: singleCartItem?.quantity, // ✅ fixed spelling
         />
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 mt-5 p-5">
-        <Address setCurrentSelectedAddress={setCurrentSelectedAddress}/>
+        <Address setCurrentSelectedAddress={setCurrentSelectedAddress} />
         <div className="flex flex-col gap-4">
           {cartItems && cartItems.items && cartItems.items.length > 0
             ? cartItems.items.map((item) => (
