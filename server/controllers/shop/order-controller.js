@@ -17,7 +17,7 @@ const createOrder = async (req, res) => {
       orderUpdateDate,
       paymentId,
       payerId,
-      cardId
+      cardId,
     } = req.body;
 
     const create_payment_json = {
@@ -32,26 +32,25 @@ const createOrder = async (req, res) => {
       transactions: [
         {
           item_list: {
-            items: 
-            // cartItems.map((item) => ({
-            //   name: item.title,
-            //   sku: item.productId,
-            //   price: Number(item.price).toFixed(2),
-            //   currency: "USD",
-            //   quantity: Number(item.quantity),
-            // })),
-            cartItems.forEach((item, index) => {
-              console.log(`🛒 Item ${index + 1}:`, {
-                name: item.title,
-                sku: item.productId,
-                price: Number(item.price).toFixed(2),
-                quantity: Number(item.quantity),
-                isQuantityValid: typeof item.quantity === "number" && item.quantity > 0,
-                isPriceValid: !isNaN(Number(item.price)),
-              });
-            }),
-
-            
+            items:
+              // cartItems.map((item) => ({
+              //   name: item.title,
+              //   sku: item.productId,
+              //   price: Number(item.price).toFixed(2),
+              //   currency: "USD",
+              //   quantity: Number(item.quantity),
+              // })),
+              cartItems.forEach((item, index) => {
+                console.log(`🛒 Item ${index + 1}:`, {
+                  name: item.title,
+                  sku: item.productId,
+                  price: Number(item.price).toFixed(2),
+                  quantity: Number(item.quantity),
+                  isQuantityValid:
+                    typeof item.quantity === "number" && item.quantity > 0,
+                  isPriceValid: !isNaN(Number(item.price)),
+                });
+              }),
           },
           amount: {
             currency: "USD",
@@ -113,33 +112,31 @@ const createOrder = async (req, res) => {
 
 const capturePayment = async (req, res) => {
   try {
+    const { payerId, paymentId, orderId } = req.body;
 
-    const {payerId,paymentId,orderId} = req.body
+    let order = await Order.findById(orderId);
 
-    let order = await Order.findById(orderId)
-
-    if(!order){
+    if (!order) {
       return Response.status(404).json({
-        success:false,
-        message:"order cann't found",
-      })
+        success: false,
+        message: "order cann't found",
+      });
     }
-    order.paymentStatus = 'paid',
-    order.orderStatus = 'confirmed',
-    order.paymentId = paymentId,
-    order.payerId = payerId
+    (order.paymentStatus = "paid"),
+      (order.orderStatus = "confirmed"),
+      (order.paymentId = paymentId),
+      (order.payerId = payerId);
 
-    const getCartId = order.cardId
-    const cart = await Cart.findByIdAndDelete(getCartId)
+    const getCartId = order.cardId;
+    const cart = await Cart.findByIdAndDelete(getCartId);
 
-    await order.save()
+    await order.save();
 
     res.status(202).json({
-      success:true,
-      message:"order confirmed!!",
-      data:order
-    })
-
+      success: true,
+      message: "order confirmed!!",
+      data: order,
+    });
   } catch (error) {
     console.log("🚀 ~ createOrder ~ error:", error);
     res.status(500).json({
@@ -149,4 +146,53 @@ const capturePayment = async (req, res) => {
   }
 };
 
-module.exports = { createOrder, capturePayment };
+const getAllOrderByUser = async (req, res) => {
+  try {
+    const { userId } = req.params;
+    const orders = await Order.find({ userId });
+
+    if (!orders.length) {
+      return res.status(404).json({
+        success: false,
+        message: "No Order Found!!",
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      data: orders,
+    });
+  } catch (e) {
+    console.log("🚀 ~ getAllOrderByUser ~ e:", e);
+    res.status(500).json({
+      success: false,
+      message: "Error occured in get All Order By User method",
+    });
+  }
+};
+const getOrderDetails = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const order = await Order.findById(id);
+
+    if (!order) {
+      return res.status(404).json({
+        success: false,
+        message: "Order Not Found!!!",
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      data: order,
+    });
+  } catch (e) {
+    console.log("🚀 ~ getAllOrderByUser ~ e:", e);
+    res.status(500).json({
+      success: false,
+      message: "Error occured in get Order Details method",
+    });
+  }
+};
+
+module.exports = { createOrder, capturePayment ,getAllOrderByUser,getOrderDetails};

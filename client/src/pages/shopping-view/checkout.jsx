@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { createNewOrder } from "@/store/shop/order-slice";
 import { data } from "autoprefixer";
+import { useToast } from "@/hooks/use-toast";
 
 function ShoppingCheckout() {
   const { cartItems } = useSelector((state) => state.shopCart);
@@ -14,6 +15,9 @@ function ShoppingCheckout() {
     "🚀 ~ ShoppingCheckout ~ cartItems  product id quantity:",
     cartItems?.items?.quantity
   );
+
+    const { toast } = useToast();
+
 
   const { user } = useSelector((state) => state.auth);
   console.log("🚀 ~ ShoppingCheckout ~ user:", user);
@@ -45,9 +49,25 @@ function ShoppingCheckout() {
   console.log("🚀 ~ ShoppingCheckout ~ totalCartAmount:", totalCartAmount);
 
   const handleInitiatePaypalPayment = () => {
+    if (cartItems.length === 0) {
+      toast({
+        title: "Your Cart is Empty. Please Add Item to Proceed.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (currentSelectedAddress === null) {
+      toast({
+        title: "Please Select One Address to Proceed!!!",
+        variant: "destructive",
+      });
+      return;
+    }
+
     const orderData = {
       userId: user?.id,
-      cardId:cartItems?._id,
+      cardId: cartItems?._id,
       cartItems: cartItems.items.map((singleCartItem) => ({
         productId: singleCartItem?.productId,
         title: singleCartItem?.title,
