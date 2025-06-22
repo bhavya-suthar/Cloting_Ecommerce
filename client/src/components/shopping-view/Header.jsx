@@ -1,6 +1,10 @@
-
 import { HousePlug, LogOut, Menu, ShoppingCart, UserCog } from "lucide-react";
-import { Link, useNavigate } from "react-router-dom";
+import {
+  Link,
+  useLocation,
+  useNavigate,
+  useSearchParams,
+} from "react-router-dom";
 import { Sheet, SheetContent, SheetTrigger } from "../ui/sheet";
 import { Button } from "../ui/button";
 import { useDispatch, useSelector } from "react-redux";
@@ -21,24 +25,38 @@ import { fetchCartItems } from "@/store/shop/cart-slice";
 import { Label } from "@radix-ui/react-label";
 
 function MenuItems() {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const [searchParams, setSearchParams] = useSearchParams();
 
-  const navigate = useNavigate()
-  function handleNavigate(getCurrentMenuItem){
-    console.log("🚀 ~ handleNavigate ~ getCurrentMenuItem:", getCurrentMenuItem)
-    sessionStorage.removeItem('filters')
-    const currentFilter = getCurrentMenuItem.id !== 'home' ? {
-      category : [getCurrentMenuItem.id]
-    }: null
+  function handleNavigate(getCurrentMenuItem) {
+    console.log(
+      "🚀 ~ handleNavigate ~ getCurrentMenuItem:",
+      getCurrentMenuItem
+    );
+    sessionStorage.removeItem("filters");
+    const currentFilter =
+      getCurrentMenuItem.id !== "home" &&
+      getCurrentMenuItem.id !== "products" &&
+      getCurrentMenuItem.id !== "search"
+        ? {
+            category: [getCurrentMenuItem.id],
+          }
+        : null;
 
-    sessionStorage.setItem('filters', JSON.stringify(currentFilter))
-    navigate(getCurrentMenuItem.path)
+    sessionStorage.setItem("filters", JSON.stringify(currentFilter));
+    location.pathname.includes("listing") && currentFilter !== null
+      ? setSearchParams(
+          new URLSearchParams(`?category=${getCurrentMenuItem.id}`)
+        )
+      : navigate(getCurrentMenuItem.path);
   }
   return (
     <nav className="flex flex-col mb-3 lg:mb-0 lg:items-center gap-6 lg:flex-row">
       {shoppingViewHeaderMenuItems.map((menuItem) => (
         <Label
           className="text-sm font-medium cursor-pointer"
-          onClick={()=> handleNavigate(menuItem)}
+          onClick={() => handleNavigate(menuItem)}
           key={menuItem.id}
         >
           {menuItem.label}
@@ -77,7 +95,7 @@ function HeaderRightContent() {
           <span className="sr-only">User Cart</span>
         </Button>
         <UserCartWrapper
-        setOpenCartSheet={setOpenCartSheet}
+          setOpenCartSheet={setOpenCartSheet}
           cartItems={
             cartItems && cartItems.items && cartItems.items.length > 0
               ? cartItems.items
