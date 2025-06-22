@@ -137,6 +137,11 @@ export const shoppingViewHeaderMenuItems = [
     label: "Footware",
     path: "/shop/listing",
   },
+  {
+    id: "search",
+    label: "search",
+    path: "/shop/search",
+  },
 ];
 export const filterOptions = {
   category: [
