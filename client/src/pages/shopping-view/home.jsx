@@ -139,7 +139,7 @@ function ShoppingHome() {
             } absolute top-0 left-0 w-full h-full object-cover transition-opacity duration-1000 `}
           />
         ))}
-        <Button
+        {/* <Button
           variant="outline"
           size="icon"
           className="absolute top-1/2 left-4 transform -translate-y-1/2 bg-white/80"
@@ -162,7 +162,7 @@ function ShoppingHome() {
           }
         >
           <ChevronRightIcon className="w-4 h-4 text-black hover:text-white" />
-        </Button>
+        </Button> */}
       </div>
 
       <section className="py-12 bg-gray-50">

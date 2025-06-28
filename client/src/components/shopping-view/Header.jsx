@@ -1,4 +1,4 @@
-import { HousePlug, LogOut, Menu, ShoppingCart, UserCog } from "lucide-react";
+import { HousePlug, LogOut, Menu, ShoppingBag, ShoppingBagIcon, ShoppingCart, UserCog } from "lucide-react";
 import {
   Link,
   useLocation,
@@ -23,6 +23,7 @@ import UserCartWrapper from "./cart-wrapper";
 import { useEffect, useState } from "react";
 import { fetchCartItems } from "@/store/shop/cart-slice";
 import { Label } from "@radix-ui/react-label";
+import shoppingLogo from "../../assets/Shopee-Logo-.png"
 
 function MenuItems() {
   const navigate = useNavigate();
@@ -137,8 +138,10 @@ function ShoppingHeader() {
     <header className="sticky top-0 z-40 w-full border-b bg-background">
       <div className="flex h-16 items-center justify-between px-4 md:px-6">
         <Link to="/shop/home" className="flex items-center gap-2">
-          <HousePlug className="h-6 w-6" />
-          <span className="font-bold">Ecommerce</span>
+          {/* <HousePlug className="h-6 w-6" /> */}
+          {/* <ShoppingBag/> */}
+          <img src={shoppingLogo} width="100px" alt="" />
+          {/* <span className="font-bold">Shopee</span> */}
         </Link>
         <Sheet>
           <SheetTrigger asChild>

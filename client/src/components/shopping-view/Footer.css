@@ -1,0 +1,25 @@
+/* Footer.css */
+.footer {
+  background-color: #1c1c1c;
+  color: #ffffff;
+}
+
+
+.footer .social-links a {
+  color: #ffffff; /* or any desired color */
+  font-size: 18px;
+  transition: color 0.3s ease;
+}
+
+.footer .social-links a:hover {
+  color: #0d6efd; /* Optional hover color */
+}
+
+.footer a:hover {
+  color: #0d6efd;
+  transition: 0.3s ease;
+}
+
+.footer .social-links i {
+  font-size: 18px;
+}

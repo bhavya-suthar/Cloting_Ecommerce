@@ -23,6 +23,9 @@ import { Skeleton } from "@/components/ui/skeleton";
 import PaypalReturnPage from "./pages/shopping-view/paypal-return";
 import PaymentSuccessPage from "./pages/shopping-view/payment-success";
 import SearchProducts from "./pages/shopping-view/search";
+import Footer from "./components/shopping-view/Footer";
+// import 'bootstrap/dist/css/bootstrap.min.css';
+// import '@fortawesome/fontawesome-free/css/all.min.css';
 
 function App() {
   const { isAuthenticated, user, isLoading } = useSelector(
@@ -34,60 +37,66 @@ function App() {
   }, [dispatch]);
 
   if (isLoading)
-    return <Skeleton className="w-full h-[600px] rounded-full bg-black" />;
+    return (
+      // <div className="loader"></div>
+       <Skeleton className=" w-full h-[600px] rounded-full bg-black" /> 
+    );
   console.log("🚀 ~ App ~ isLoading, user:", isLoading, user);
 
   return (
-    <div className="flex flex-col overflow-hidden bg-white">
-      <Routes>
-        <Route path="/" element={<Navigate to="/auth/login" />} />
-        <Route
-          path="/auth"
-          element={
-            <CheckAuth isAuthenticated={isAuthenticated} user={user}>
-              <AuthLayout />
-            </CheckAuth>
-          }
-        >
-          <Route path="login" element={<AuthLogin />} />
-          <Route path="register" element={<AuthRegister />} />
-          <Route />
-        </Route>
-        <Route
-          path="/admin"
-          element={
-            <CheckAuth isAuthenticated={isAuthenticated} user={user}>
-              <AdminLayout />
-            </CheckAuth>
-          }
-        >
-          <Route path="dashboard" element={<AdminDashboard />} />
-          <Route path="products" element={<AdminProducts />} />
-          <Route path="orders" element={<AdminOrders />} />
-          <Route path="features" element={<AdminFeatures />} />
-        </Route>
+    <>
+      <div className="flex flex-col min-h-screen bg-white">
+        <Routes>
+          <Route path="/" element={<Navigate to="/auth/login" />} />
+          <Route
+            path="/auth"
+            element={
+              <CheckAuth isAuthenticated={isAuthenticated} user={user}>
+                <AuthLayout />
+              </CheckAuth>
+            }
+          >
+            <Route path="login" element={<AuthLogin />} />
+            <Route path="register" element={<AuthRegister />} />
+            <Route />
+          </Route>
+          <Route
+            path="/admin"
+            element={
+              <CheckAuth isAuthenticated={isAuthenticated} user={user}>
+                <AdminLayout />
+              </CheckAuth>
+            }
+          >
+            <Route path="dashboard" element={<AdminDashboard />} />
+            <Route path="products" element={<AdminProducts />} />
+            <Route path="orders" element={<AdminOrders />} />
+            <Route path="features" element={<AdminFeatures />} />
+          </Route>
 
-        <Route
-          path="/shop"
-          element={
-            <CheckAuth isAuthenticated={isAuthenticated} user={user}>
-              <ShoppingLayout />
-            </CheckAuth>
-          }
-        >
-          <Route path="home" element={<ShoppingHome />} />
-          <Route path="listing" element={<ShoppingListing />} />
-          <Route path="checkout" element={<ShoppingCheckout />} />
-          <Route path="account" element={<ShoppingAccount />} />
-          <Route path="paypal-return" element={<PaypalReturnPage />} />
-          <Route path="paypal-success" element={<PaymentSuccessPage />} />
-          <Route path="search" element={<SearchProducts />} />
-        </Route>
+          <Route
+            path="/shop"
+            element={
+              <CheckAuth isAuthenticated={isAuthenticated} user={user}>
+                <ShoppingLayout />
+              </CheckAuth>
+            }
+          >
+            <Route path="home" element={<ShoppingHome />} />
+            <Route path="listing" element={<ShoppingListing />} />
+            <Route path="checkout" element={<ShoppingCheckout />} />
+            <Route path="account" element={<ShoppingAccount />} />
+            <Route path="paypal-return" element={<PaypalReturnPage />} />
+            <Route path="paypal-success" element={<PaymentSuccessPage />} />
+            <Route path="search" element={<SearchProducts />} />
+          </Route>
 
-        <Route path="/unauth-page" element={<UnauthPage />} />
-        <Route path="*" element={<NotFound />} />
-      </Routes>
-    </div>
+          <Route path="/unauth-page" element={<UnauthPage />} />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </div>
+      <Footer />
+    </>
   );
 }
 
