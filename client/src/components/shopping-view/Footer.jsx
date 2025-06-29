@@ -4,11 +4,13 @@ import React from "react";
 const Footer = () => {
   return (
    <section className="bg-white border border-5 text-gray-800 py-10 px-4 shadow-lg">
-      <div className="max-w-7xl mx-auto grid gap-8 md:grid-cols-2 lg:grid-cols-4">
+      {/* <div className="max-w-7xl mx-auto grid gap-8 md:grid-cols-2 lg:grid-cols-4"> */}
+      <div className="justify-center max-w-7xl mx-auto grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+
         {/* About Section */}
-        <div>
-          <a href="/" className="text-2xl font-bold text-white mb-3 block">
-            Dewi
+        <div className="text-center">
+          <a href="/" className="text-2xl font-semibold text-black mb-3 block">
+            Shopee
           </a>
           <p>A108 Adam Street</p>
           <p>New York, NY 535022</p>
@@ -19,7 +21,7 @@ const Footer = () => {
             <strong>Email:</strong> <span>info@example.com</span>
           </p>
 
-          <div className="flex gap-4 mt-4">
+          <div className="flex gap-4 mt-4 justify-center">
             <a href="#" className="hover:text-blue-500 text-xl">
               <Twitter/>
             </a>
@@ -36,11 +38,11 @@ const Footer = () => {
         </div>
 
         {/* Useful Links */}
-        <div>
+        <div className="text-center">
           <h4 className="text-lg font-semibold mb-4">Useful Links</h4>
-          <ul className="space-y-2">
+          <ul className="space-y-2 justify-center">
             {["Home", "About us", "Services", "Terms of services", "Privacy policy"].map((link, index) => (
-              <li key={index} className="flex items-center gap-2">
+              <li key={index} className="flex justify-center gap-2">
                 <i className="fa-solid fa-greater-than text-sm"></i>
                 <a href="#" className="hover:text-blue-400">{link}</a>
               </li>
@@ -49,11 +51,11 @@ const Footer = () => {
         </div>
 
         {/* Our Services */}
-        <div>
+        <div className="text-center">
           <h4 className="text-lg font-semibold mb-4">Our Services</h4>
-          <ul className="space-y-2">
+          <ul className="flex flex-col space-y-2 justify-center">
             {["Web Design", "Web Development", "Product Manager", "Marketing", "Graphic Design"].map((service, index) => (
-              <li key={index} className="flex items-center gap-2">
+              <li key={index} className="flex justify-center gap-2">
                 <i className="fa-solid fa-greater-than text-sm"></i>
                 <a href="#" className="hover:text-blue-400">{service}</a>
               </li>

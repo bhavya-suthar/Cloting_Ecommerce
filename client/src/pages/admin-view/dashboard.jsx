@@ -9,6 +9,8 @@ function AdminDashboard() {
     const {user} = useSelector(state=>state.auth)
     console.log("🚀 ~ AdminDashboard ~ users:", user)
   return (
+    <>
+      <h1 className="text-3xl">Welcome, Admin!</h1>
     <div className="pc-container">
       <div className="pc-content">
         <div className="grid grid-cols-12 gap-6">
@@ -94,8 +96,8 @@ function AdminDashboard() {
                   </div>
                   <div className="grow ltr:text-right rtl:text-left">
                   <h2 style={{color:"blue",fontWeight:"bold"}}>Facebook</h2>
-                    <h3 className="mb-2">12,281</h3>
-                    <h5 className="text-success-500 mb-0">
+                    <h3 className="mb-3">12,281</h3>
+                    <h5 className="text-success-500 mb-3">
                       +7.2% <span className="text-muted-foreground">Total Likes</span>
                     </h5>
                   </div>
@@ -186,8 +188,8 @@ function AdminDashboard() {
                   <div className="grow ltr:text-right rtl:text-left">
                                     <h2 className="text-blue-500" style={{fontWeight:"bold"}}>Twiter</h2>
 
-                    <h3 className="mb-2">10,500</h3>
-                    <h5 className="text-purple-500 mb-0">
+                    <h3 className="mb-3">10,500</h3>
+                    <h5 className="text-purple-500 mb-3">
                       +5.9% <span className="text-muted-foreground">Total Likes</span>
                     </h5>
                   </div>
@@ -234,7 +236,7 @@ function AdminDashboard() {
                                     <h2 className="text-pink-700" style={{fontWeight:"bold"}}>Instagram</h2>
 
                     <h3 className="mb-2">10,500</h3>
-                    <h5 className="text-purple-500 mb-0">
+                    <h5 className="text-purple-500 mb-3">
                       +5.9% <span className="text-muted-foreground">Total Likes</span>
                     </h5>
                   </div>
@@ -273,6 +275,7 @@ function AdminDashboard() {
         </div>
       </div>
     </div>
+    </>
   );
 }
 

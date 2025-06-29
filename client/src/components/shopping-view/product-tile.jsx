@@ -26,7 +26,7 @@ function ShoppingProductTile({
               {`Only ${product?.totalStock} items left`}
             </Badge>
           ) : */}
-           {product?.salePrice >= 0 ? (
+           {product?.salePrice > 0 ? (
             <Badge className="absolute top-2 left-2 bg-red-500 hover:bg-red-600">
               Sale
             </Badge>

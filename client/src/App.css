@@ -6,8 +6,6 @@
 } */
 
 
-
-
 .loader {
   width: 50px;
   aspect-ratio: 1;
@@ -41,7 +39,7 @@
 
 .pc-container{
   position: relative;
-  top: 74px;
+  top: 45px;
   min-height: calc(100vh - 135px);
   transition-property: all;
   transition-duration: 200ms;

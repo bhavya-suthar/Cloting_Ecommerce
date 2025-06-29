@@ -108,7 +108,8 @@ function AdminProducts() {
 
   return (
     <Fragment>
-      <div className="mb-5 w-full flex justify-end">
+      <div className="mb-5 w-full flex justify-between">
+    <h1 className="text-2xl font-semibold">All Products</h1>
         <Button onClick={() => setOpenCreateProductsDialog(true)}>
           Add New Product
         </Button>

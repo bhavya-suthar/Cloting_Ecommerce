@@ -90,7 +90,7 @@ const AdminOrdersView = () => {
     //                 <TableCell>{orderItem?._id}</TableCell>
     //                 <TableCell>{orderItem?.orderDate.split("T")[0]}</TableCell>
     //                 <TableCell>
-    //                   <Badge
+    //                   <
     //                     className={`py-1 px-3 ${
     //                       orderItem?.orderStatus === "confirmed"
     //                         ? "bg-green-500"
